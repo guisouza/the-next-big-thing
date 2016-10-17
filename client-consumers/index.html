@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.5.0/socket.io.min.js"></script>
+    <script>
+      var socket = io('http://localhost:8800');
+      var data = {
+        availableCores: navigator.hardwareConcurrency,
+        totalCores: navigator.hardwareConcurrency,
+      }
+      function broadCastCores(){
+        socket.emit('availableCores', data.availableCores);
+        socket.emit('totalCores', data.totalCores);
+      }
+
+      socket.on('job',function(){
+        data.totalCores--;
+        broadCastCores();
+      })
+
+      socket.on('jobDone',function(){
+        data.totalCores++;
+        broadCastCores();
+      })
+
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>
